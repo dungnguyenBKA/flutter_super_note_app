@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_flutter/theme/app_color.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,10 +11,42 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return const CupertinoApp(
       title: 'Flutter Demo',
-      home: HomeRoute(),
+      home: AppTheme(
+        isDarkTheme: true,
+        child: HomeRoute(),
+      ),
     );
+  }
+}
+
+class AppTheme extends InheritedWidget {
+  final bool isDarkTheme;
+
+  const AppTheme({
+    required this.isDarkTheme,
+    Key? key,
+    required Widget child,
+  }) : super(child: child, key: key);
+
+  @override
+  bool updateShouldNotify(AppTheme oldWidget) {
+    return oldWidget.isDarkTheme != isDarkTheme;
+  }
+
+  BaseAppThemeColor getColorPallet() {
+    if (isDarkTheme) {
+      return darkThemeColor;
+    }
+    return lightThemeColor;
+  }
+
+  static AppTheme of(BuildContext context) {
+    final AppTheme? result =
+        context.dependOnInheritedWidgetOfExactType<AppTheme>();
+    assert(result != null, 'No FrogColor found in context');
+    return result!;
   }
 }
 
@@ -21,7 +55,10 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colorPallet = AppTheme.of(context).getColorPallet();
+
     return Scaffold(
+      backgroundColor: colorPallet.colorBackground3,
       body: SafeArea(
         child: Column(
           children: const [
@@ -39,6 +76,7 @@ class NewsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colorPallet = AppTheme.of(context).getColorPallet();
     return Container(
       alignment: AlignmentDirectional.centerStart,
       padding: const EdgeInsets.symmetric(
@@ -51,13 +89,13 @@ class NewsItem extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Container(
-              color: Colors.black12,
+              color: colorPallet.colorDivider1,
               padding: const EdgeInsets.all(8),
-              child: const Text(
+              child: Text(
                 "BĐS",
                 style: TextStyle(
                   fontSize: 13,
-                  color: Colors.black87,
+                  color: colorPallet.colorText1,
                 ),
               ),
             ),
@@ -70,16 +108,16 @@ class NewsItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Flexible(
+                Flexible(
                   child: Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       right: 16,
                     ),
                     child: Text(
                       "Vietceramics khai trương showroom Him Lam Quận 7",
                       style: TextStyle(
                           fontSize: 16,
-                          color: Colors.black,
+                          color: colorPallet.colorText1,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -100,28 +138,38 @@ class NewsItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Row(
-                  children: const [
+                  children: [
                     Text(
                       "CafeF",
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: colorPallet.colorText4,
                           fontSize: 13),
                     ),
                     TextWithIcon(
-                      text: Text("14h trước"),
+                      text: Text(
+                        "14h trước",
+                        style: TextStyle(
+                          color: colorPallet.colorText2,
+                        ),
+                      ),
                       icon: Icon(
                         Icons.access_time,
                         size: 12,
-                        color: Colors.black45,
+                        color: colorPallet.colorText4,
                       ),
                     ),
                     TextWithIcon(
-                      text: Text("23"),
+                      text: Text(
+                        "23",
+                        style: TextStyle(
+                          color: colorPallet.colorText2,
+                        ),
+                      ),
                       icon: Icon(
                         Icons.chat,
                         size: 12,
-                        color: Colors.black45,
+                        color: colorPallet.colorText4,
                       ),
                     ),
                   ],
@@ -220,7 +268,7 @@ class HotNewsItem extends StatelessWidget {
                         vertical: 8,
                       ),
                       child: Text(
-                        "Cập nhật BCTC quý 2 ngày 27/7: Lợi nhuận PVS, HBC, Sacombank giảm, một công ty than gây bất ngờ lớn ",
+                        "GENG Chovy",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
